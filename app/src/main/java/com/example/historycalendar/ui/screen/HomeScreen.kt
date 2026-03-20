@@ -108,7 +108,7 @@ fun HomeScreen(
             }
             item {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    SummaryCard(icon = Icons.Default.DateRange, title = "Ô lịch", value = "42", caption = "Hiển thị trọn tháng")
+                    // SummaryCard(icon = Icons.Default.DateRange, title = "Ô lịch", value = "42", caption = "Hiển thị trọn tháng")
                     SummaryCard(icon = Icons.Default.NotificationsActive, title = "Sự kiện", value = state.events.size.toString(), caption = "Đang lưu trong máy")
                 }
             }
