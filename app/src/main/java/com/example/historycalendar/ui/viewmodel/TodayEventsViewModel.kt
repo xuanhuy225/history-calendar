@@ -1,5 +1,6 @@
 package com.example.historycalendar.ui.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.historycalendar.data.db.entity.CalendarType
@@ -15,17 +16,26 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodayEventsViewModel @Inject constructor(
-    private val repository: HistoricalEventRepository
+    private val repository: HistoricalEventRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TodayEventsUiState())
     val uiState: StateFlow<TodayEventsUiState> = _uiState.asStateFlow()
 
     init {
+        // "date" arg is ISO format (yyyy-MM-dd); falls back to today if absent
+        val dateArg = savedStateHandle.get<String>("date")
+        val date = if (dateArg != null) runCatching { LocalDate.parse(dateArg) }.getOrNull()
+                   else null
+        loadDay(date ?: LocalDate.now())
+    }
+
+    private fun loadDay(date: LocalDate) {
         viewModelScope.launch {
-            val today = LocalDate.now()
-            val lunar = LunarCalendarUtils.solarToLunar(today)
-            val solar = repository.getTodaySolarEvents(today.monthValue, today.dayOfMonth)
+            val lunar = LunarCalendarUtils.solarToLunar(date)
+            val solar = repository.getTodaySolarEvents(date.monthValue, date.dayOfMonth)
             val lunarEvents = repository.getTodayLunarEvents(lunar.month, lunar.day)
+            val today = LocalDate.now()
             val items = (solar + lunarEvents).map {
                 val years = today.year - it.year
                 TodayEventUi(
@@ -38,8 +48,11 @@ class TodayEventsViewModel @Inject constructor(
                     description = it.description.orEmpty()
                 )
             }
+            val isToday = date == today
+            val dayLabel = if (isToday) "Hôm nay ${date.dayOfMonth}/${date.monthValue}/${date.year}"
+                           else "${date.dayOfMonth}/${date.monthValue}/${date.year}"
             _uiState.value = TodayEventsUiState(
-                title = "Hôm nay ${today.dayOfMonth}/${today.monthValue}/${today.year}",
+                title = dayLabel,
                 subtitle = "Âm lịch: ${lunar.day}/${lunar.month}",
                 events = items
             )
@@ -58,3 +71,4 @@ data class TodayEventUi(
     val subtitle: String,
     val description: String
 )
+

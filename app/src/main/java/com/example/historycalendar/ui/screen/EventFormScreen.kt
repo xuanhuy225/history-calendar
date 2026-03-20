@@ -1,5 +1,7 @@
 package com.example.historycalendar.ui.screen
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,7 +39,12 @@ fun EventFormScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(padding)
+                .imePadding()
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             ElevatedCard(modifier = Modifier.fillMaxWidth()) {

@@ -53,6 +53,7 @@ fun HistoryCalendarAppRoot(isReady: Boolean) {
                 viewModel = vm,
                 onAddEvent = { navController.navigate(AppDestination.AddEvent) },
                 onOpenToday = { navController.navigate(AppDestination.Today) },
+                onOpenDay = { date -> navController.navigate(AppDestination.dayEvents(date.toString())) },
                 onOpenSettings = { navController.navigate(AppDestination.Settings) },
                 onEditEvent = { navController.navigate("edit_event/$it") }
             )
@@ -69,6 +70,13 @@ fun HistoryCalendarAppRoot(isReady: Boolean) {
             EventFormScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }
         composable(AppDestination.Today) {
+            val vm: TodayEventsViewModel = hiltViewModel()
+            TodayEventsScreen(viewModel = vm, onBack = { navController.popBackStack() })
+        }
+        composable(
+            route = AppDestination.DayEvents,
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ) {
             val vm: TodayEventsViewModel = hiltViewModel()
             TodayEventsScreen(viewModel = vm, onBack = { navController.popBackStack() })
         }

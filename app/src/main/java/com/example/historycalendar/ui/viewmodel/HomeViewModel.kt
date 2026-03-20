@@ -73,6 +73,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
             list += CalendarCellUi(
+                date = date,
                 solarDay = date.dayOfMonth,
                 lunarText = "%d/%d".format(lunar.day, lunar.month),
                 isCurrentMonth = date.monthValue == month.monthValue,
@@ -92,6 +93,7 @@ data class HomeUiState(
 )
 
 data class CalendarCellUi(
+    val date: LocalDate,
     val solarDay: Int,
     val lunarText: String,
     val isCurrentMonth: Boolean,
