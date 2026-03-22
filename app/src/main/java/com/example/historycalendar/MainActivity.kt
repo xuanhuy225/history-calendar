@@ -27,14 +27,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Request notification permission only on first launch, not on recreate
+        if (savedInstanceState == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
         setContent {
             val viewModel: AppStartViewModel = hiltViewModel()
             val ready by viewModel.isReady.collectAsStateWithLifecycle()
 
             LaunchedEffect(ready) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
                 if (ready) HistoryCalendarWidgetUpdater.requestUpdate(this@MainActivity)
             }
 

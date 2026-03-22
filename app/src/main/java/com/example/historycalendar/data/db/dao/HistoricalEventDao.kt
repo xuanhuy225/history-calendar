@@ -31,6 +31,9 @@ interface HistoricalEventDao {
     @Query("SELECT * FROM historical_event WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): HistoricalEventEntity?
 
+    @Query("SELECT * FROM historical_event WHERE title = :title LIMIT 1")
+    suspend fun getByTitle(title: String): HistoricalEventEntity?
+
     @Query("""
         SELECT * FROM historical_event
         WHERE calendar_type = 'SOLAR' AND month = :month AND day = :day AND notify_enabled = 1

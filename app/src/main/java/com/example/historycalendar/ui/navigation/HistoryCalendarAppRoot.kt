@@ -92,11 +92,24 @@ fun HistoryCalendarAppRoot(isReady: Boolean) {
             ) { uri: Uri? ->
                 if (uri != null) scope.launch { vm.importBackup(uri) }
             }
+            val importExcelLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.OpenDocument()
+            ) { uri: Uri? ->
+                if (uri != null) vm.importFromExcel(uri)
+            }
             SettingsScreen(
                 viewModel = vm,
                 onBack = { navController.popBackStack() },
                 onExport = { exportLauncher.launch("history-calendar-backup.json") },
-                onImport = { importLauncher.launch(arrayOf("application/json")) }
+                onImport = { importLauncher.launch(arrayOf("application/json")) },
+                onImportExcel = {
+                    importExcelLauncher.launch(
+                        arrayOf(
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            "application/vnd.ms-excel"
+                        )
+                    )
+                }
             )
         }
     }

@@ -16,6 +16,7 @@ class HistoricalEventRepository @Inject constructor(
     fun search(keyword: String): Flow<List<HistoricalEventEntity>> = dao.search(keyword)
     suspend fun count(): Int = dao.count()
     suspend fun getById(id: String): HistoricalEventEntity? = dao.getById(id)
+    suspend fun getByTitle(title: String): HistoricalEventEntity? = dao.getByTitle(title)
     suspend fun insert(event: HistoricalEventEntity) {
         dao.insert(event)
         HistoryCalendarWidgetUpdater.requestUpdate(context)

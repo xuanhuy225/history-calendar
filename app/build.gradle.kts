@@ -46,6 +46,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/DEPENDENCIES"
+            excludes += "/META-INF/LICENSE*"
+            excludes += "/META-INF/NOTICE*"
+            excludes += "/META-INF/*.kotlin_module"
         }
     }
 }
@@ -76,7 +80,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
+    // fastexcel-reader: lightweight .xlsx reader, compatible with Android 7+ (no MethodHandle/log4j)
+    implementation("org.dhatim:fastexcel-reader:0.18.4")
+
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
